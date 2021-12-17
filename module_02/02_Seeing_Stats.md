@@ -606,8 +606,12 @@ our dataset by removing rows that do not include the IBU measure.
     scatter plot with `beers_filled`. What differences do you notice between the plots?
 
 ```{code-cell} ipython3
+<<<<<<< HEAD
 'a.'
 beers_filled = beers.fillna(0)
+=======
+
+>>>>>>> 9e365b865fcbf6a43dbb25d1699ecfa739dd6fb7
 ```
 
 2. Gordon Moore created an empirical prediction that the rate of
