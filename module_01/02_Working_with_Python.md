@@ -5,9 +5,9 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.10.3
+    jupytext_version: 1.11.4
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
@@ -43,7 +43,7 @@ Its important to comment your code
 
 - what the is the function supposed to do, 
 
-- etc. 
+- etc.
 
 ```{code-cell} ipython3
 def code(i):
@@ -157,8 +157,6 @@ The next 4 lines define a help documentation that can be accessed with in a coup
 
 3. `help(factorial_function)`
 
-
-
 ```{code-cell} ipython3
 factorial_function?
 ```
@@ -261,7 +259,7 @@ in addition to this. Some of them above.
 
 Play with `np.ones()` and `np.zeros()`: they create arrays full of ones
 and zeros, respectively. You pass as an argument the number of array
-elements we want. 
+elements we want.
 
 ```{code-cell} ipython3
 np.ones(5)
@@ -302,7 +300,7 @@ np.arange(2, 6, 0.5)
 
 `np.linspace(start, stop, num)`
 
-`stop` is included by default (it can be removed, read the docs), and `num` by default is 50. 
+`stop` is included by default (it can be removed, read the docs), and `num` by default is 50.
 
 ```{code-cell} ipython3
 np.linspace(2.0, 3.0)
@@ -445,7 +443,7 @@ two-dimensional (matrices). Two of these 2D sub-arrays, in this
 case; each one has 3 rows and 4 columns. Study this sketch carefully,
 while comparing with how the array `a_3D` is printed out above. 
 
-<img src="../images/3d_array_sketch.png" style="width: 400px;"/> 
+<img src="../images/3d_array_sketch.png" style="width: 400px;"/>
 
 +++
 
@@ -504,7 +502,7 @@ From the X array:
 
 +++
 
-Let's practice with a 3D array. 
+Let's practice with a 3D array.
 
 ```{code-cell} ipython3
 a_3D
@@ -522,7 +520,7 @@ The line above is telling NumPy that you want:
 * second `':'`: from the second dimension, grab all the elements (all the rows).
 * `'0'`       : from the third dimension, grab the first element (first column).
 
-If you want the first 2 elements of the first column of both matrices: 
+If you want the first 2 elements of the first column of both matrices:
 
 ```{code-cell} ipython3
 a_3D[:, 0:2, 0]
@@ -541,9 +539,17 @@ From the array named `a_3D`:
 1. Grab the two middle elements (17, 18) from the second matrix.
 2. Grab the last row from both matrices.
 3. Grab the elements of the 1st matrix that exclude the first row and the first column. 
-4. Grab the elements of the 2nd matrix that exclude the last row and the last column. 
+4. Grab the elements of the 2nd matrix that exclude the last row and the last column.
 
-+++
+```{code-cell} ipython3
+print(a_3D[1, 1, 1:3])
+print()
+print(a_3D[:, 2])
+print()
+print(a_3D[0, 1:, :3])
+print()
+print(a_3D[1,:2,:3])
+```
 
 ## NumPy == Fast and Clean! 
 
@@ -588,9 +594,9 @@ print(lst_2[0:10])
 We need to write a `for` statement, appending the result of the
 element-wise sum into a new list you call `result_lst`. 
 
-For timing, you can use the IPython "magic" `%%time`. Writing at the
-beginning of the code cell the command `%%time` will give us the time it
-takes to execute all the code in that cell. 
+For timing, you can use the IPython "magic" `%%time`. **Writing at the
+beginning of the code cell** the command `%%time` will give us the time it
+takes to execute all the code in that cell.
 
 ```{code-cell} ipython3
 %%time
@@ -642,15 +648,32 @@ Notice that in the case of arrays, the code not only is more readable (just one 
 ##### Exercise
 
 1. Try the comparison between lists and arrays, using bigger arrays; for example, of size 10,000. 
-2. Repeat the analysis, but now computing the operation that raises each element of an array/list to the power two. Use arrays of 10,000 elements. 
+2. Repeat the analysis, but now computing the operation that raises each element of an array/list to the power two. Use arrays of 10,000 elements.
 
-+++
+```{code-cell} ipython3
+arr_3 = np.random.randint(0, 100, size=10000)
+arr_4 = np.random.randint(0, 100, size=10000)
+print(arr_1[0:10])
+print(arr_2[0:10])
+print()
+```
+
+```{code-cell} ipython3
+%%time
+arr_res2 = arr_3 + arr_4
+```
+
+```{code-cell} ipython3
+%%time
+arr_res3 = arr_res2**2
+print(arr_res2)
+```
 
 ## Time to Plot
 
 You will love the Python library **Matplotlib**! You'll learn here about its module `pyplot`, which makes line plots. 
 
-We need some data to plot. Let's define a NumPy array, compute derived data using its square, cube and square root (element-wise), and plot these values with the original array in the x-axis. 
+We need some data to plot. Let's define a NumPy array, compute derived data using its square, cube and square root (element-wise), and plot these values with the original array in the x-axis.
 
 ```{code-cell} ipython3
 xarray = np.linspace(0, 2, 41)
@@ -668,7 +691,6 @@ pow_half = np.sqrt(xarray)
 To plot the resulting arrays as a function of the orginal one (`xarray`)
 in the x-axis, you need to import the module `pyplot` from **Matplotlib**.
 
-
 ```{code-cell} ipython3
 import matplotlib.pyplot as plt
 ```
@@ -682,7 +704,7 @@ plt.rcParams.update({'font.size': 22})
 plt.rcParams['lines.linewidth'] = 3
 ```
 
-The line `%matplotlib inline` is an instruction to get the output of plotting commands displayed "inline" inside the notebook. Other options for how to deal with plot output are available, but not of interest to you right now. 
+The line `%matplotlib inline` is an instruction to get the output of plotting commands displayed "inline" inside the notebook. Other options for how to deal with plot output are available, but not of interest to you right now.
 
 +++
 
@@ -711,7 +733,7 @@ plt.plot(xarray, pow3, color='green', linestyle='-', label='$x^3$')
 #Plot sqrt(x)
 plt.plot(xarray, pow_half, color='blue', linestyle='-', label='$\sqrt{x}$')
 #Plot the legends in the best location
-plt.legend(loc='best'); 
+plt.legend(loc='best');
 ```
 
 That's very nice! By now, you are probably imagining all the great stuff
@@ -725,9 +747,19 @@ If you are curious, you can explore all the beautiful plots you can make by brow
 
 ##### Exercise:
 
-Pick two different operations to apply to the `xarray` and plot them the resulting data in the same plot. 
+Pick two different operations to apply to the `xarray` and plot them the resulting data in the same plot.
 
-+++
+```{code-cell} ipython3
+res1 = pow3-pow2
+res2 = pow2*pow3
+xarray
+#Plot x^3-x^2
+plt.plot(xarray, res1, color='red', linestyle='-', label='$x^3-x^2$')
+#Plot x^2*x^3
+plt.plot(xarray, res2, color='green', linestyle='-', label='$x^2*x^3$')
+#Plot the legends in the best location
+plt.legend(loc='best');
+```
 
 ## What you've learned
 
@@ -762,10 +794,43 @@ Pick two different operations to apply to the `xarray` and plot them the resulti
     
     b. Use your function to plot sin(x) and cos(x) for x=$0..2\pi$
 
-
-
 ```{code-cell} ipython3
+import numpy as np
+np.set_printoptions(precision=6)
+np.set_printoptions(suppress=True)
+#The above commands removes the Euler's number, e, by changing the precision
 
+def sincos(x):
+    '''
+    sincos(x): calculates the sinx and cosx of the array inputted, x.
+    
+    Arguments
+    ---------
+    x: an input array
+    
+    Returns
+    -------
+    returns a tuple showing the two arrays, sin(x) then cos(x)'''
+    
+    sinx = np.sin(x)
+    cosx = np.cos(x)
+    return sinx, cosx
+
+two_pi = 2 * np.pi
+pi_over_4 = np.pi / 4
+
+piarray = np.arange(0, two_pi, pi_over_4) #an input array example
+#np.arange(start, stop, step) gives an array of evenly spaced values in a defined interval.
+#From zero to 2pi, there are 8 steps.
+
+sines, cosines = sincos(piarray) #assigns the sin(x) as 'sines' and the cos(x) as 'cosines' from  the sincos(x) function
+
+#Plot sines of piarray
+plt.plot(piarray, sines, color='red', linestyle='-', label='sin(x)')
+#Plot cosines of piarray
+plt.plot(piarray, cosines, color='green', linestyle='-', label='cos(x)')
+#Plot the legends in the best location
+plt.legend(loc='best');
 ```
 
 2. Use a for-loop to create a variable called `A_99`, where every element is the product
@@ -776,11 +841,23 @@ of the two indices from 0 to 9 e.g. A_99[3,2]=6 and A_99[4,4]=16.
     b. Calculate the mean of `A_99`
 
     c. Calculate the standard deviation of `A_99`
-    
-
 
 ```{code-cell} ipython3
+%%time
+import numpy as np
 
+A_99o = [[i*j for i in range(10)] for j in range(10)]
+A_99 = np.reshape(A_99o, (10,10))
+#print(A_99)
+total = A_99.sum()
+print()
+#print(total)
+print('mean of A_99 is', total/100)
+print()
+print()
+print('Standard Deviation of A_99 is',np.std(A_99))
+print()
+print()
 ```
 
 3. Use the two arrays, X and Y, given below to create A_99 using numpy array math rather than a for-loop. 
@@ -794,7 +871,26 @@ of the two indices from 0 to 9 e.g. A_99[3,2]=6 and A_99[4,4]=16.
     d. create a filled contour plot of X, Y, A_99 [contourf plot documentation](https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.contourf.html)
 
 ```{code-cell} ipython3
+%%time
+import numpy as np
+import matplotlib.pyplot as plt #for plotting
 
+plt.rcParams.update({'font.size': 22})
+plt.rcParams['lines.linewidth'] = 3
+#Increasing Default Parameters
+
+X, Y = np.meshgrid(np.arange(0,10), np.arange(0,10))
+A_99 = X * Y
+total = A_99.sum()
+print()
+#print(total)
+print('mean of A_99 is', total/100) #total/(number of values) number of values = 10*10
+print()
+print()
+print('Standard Deviation of A_99 is',np.std(A_99))
+print()
+print()
+plt.contourf(X,Y,X*Y) #plt.contourf() shades in, plt.contour() doesn't shade in
 ```
 
 4. The following linear interpolation function has an error. It is supposed to return y(x) given the the two points $p_1=[x_1,~y_1]$ and $p_2=[x_2,~y_2]$. Currently, it just returns and error.
@@ -810,6 +906,20 @@ def linInterp(x,p1,p2):
     
     return p1[2]+slope*(x - p1[1])
 ```
+
+```{code-cell} ipython3
+def linInterp(x,p1,p2):
+    '''linear interplation function
+    return y(x) given the two endpoints 
+    p1=np.array([x1,y1])
+    and
+    p2=np.array([x2,y2])'''
+    slope = (p2[1]-p1[1])/(p2[0]-p1[0])
+    
+    return p1[1]+slope*(x - p1[0])
+linInterp(1, [2, 3], [1, 5])
+```
+
 ```{code-cell} ipython3
 
 ```

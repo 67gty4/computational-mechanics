@@ -590,9 +590,9 @@ Throughout this course module, you will be drawing from the following references
 ```{code-cell} ipython3
 volume = 12.5*11*14
 density = 31/volume
-print('the volume is', volume, 'in^3')
-print('the density is',density, 'lb/in^3')
-volume>1000
+print('a. the volume is', volume, 'in^3')
+print('b. the density is',density, 'lb/in^3')
+print('c. the result is',volume>1000)
 ```
 
 2. Use the variables given below, `str1` and `str2`, and check the following 
@@ -652,13 +652,17 @@ elif time < 12:
 ```
 
 ```{code-cell} ipython3
-time = 22
+time = 100
 if time == 12:
     print(time, 'PM')
-elif time > 12:
+elif time > 12 and time < 24:
     print(time - 12, 'PM')
 elif time < 12:
     print(time, 'AM')
+```
+
+```{code-cell} ipython3
+
 ```
 
 ```{code-cell} ipython3

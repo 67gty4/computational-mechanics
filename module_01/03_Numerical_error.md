@@ -4,10 +4,10 @@ jupytext:
   text_representation:
     extension: .md
     format_name: myst
-    format_version: 0.12
-    jupytext_version: 1.6.0
+    format_version: 0.13
+    jupytext_version: 1.11.4
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
@@ -69,7 +69,12 @@ import matplotlib.pyplot as plt
 Calculate the terminal velocity for the given parameters, g=9.81 m/s$^2$, c=0.25 kg/m, m=60 kg.
 
 ```{code-cell} ipython3
+c=0.25 
+m=60
+g=9.81 
 
+vTerminal = np.sqrt(m*g/c)
+print(vTerminal)
 ```
 
 ```{code-cell} ipython3
@@ -239,7 +244,35 @@ If you increase the number of time steps from 0 to 12 seconds what happens to v_
 What happens when you decrease the number of time steps?
 
 ```{code-cell} ipython3
+t=np.linspace(0,12,30)
 
+v_numerical=np.zeros(len(t));
+for i in range(1,len(t)):
+    v_numerical[i]=v_numerical[i-1]+((g-c/m*v_numerical[i-1]**2))*2;
+
+v_numerical
+
+plt.plot(t,v_analytical(t,m,g,c),'-',label='analytical')
+plt.plot(t,v_numerical,'o-',label='numerical')
+plt.legend()
+plt.xlabel('time (s)')
+plt.ylabel('velocity (m/s)')
+```
+
+```{code-cell} ipython3
+t=np.linspace(0,12,4)
+
+v_numerical=np.zeros(len(t));
+for i in range(1,len(t)):
+    v_numerical[i]=v_numerical[i-1]+((g-c/m*v_numerical[i-1]**2))*2;
+
+v_numerical
+
+plt.plot(t,v_analytical(t,m,g,c),'-',label='analytical')
+plt.plot(t,v_numerical,'o-',label='numerical')
+plt.legend()
+plt.xlabel('time (s)')
+plt.ylabel('velocity (m/s)')
 ```
 
 ## Errors in Numerical Modeling
@@ -415,7 +448,16 @@ print(N/2,'*eps=',(s2-1))
 
 2. What is machine epsilon for a 32-bit floating point number?
 
-+++
+```{code-cell} ipython3
+eps=np.finfo('float64').eps
+print(2*eps+1)
+print()
+eps32=np.finfo('float32').eps
+print()
+print(eps)
+print()
+print(eps32)
+```
 
 ## Freefall Model (revisited)
 
@@ -549,7 +591,22 @@ plt.legend()
 
 Try adjusting `n` in the code above to watch the solution converge. You should notice the Euler approximation becomes almost indistinguishable from the analytical solution as `n` increases.
 
-+++
+```{code-cell} ipython3
+%%time
+n=20
+
+v_analytical,v_numerical,t=freefall(n);
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+plt.plot(t,v_numerical,'o',label=str(n)+' Euler steps')
+plt.plot(t,v_analytical,label='analytical')
+plt.title('First 2 seconds of freefall')
+plt.xlabel('time (s)')
+plt.ylabel('speed (m/s)')
+plt.legend()
+```
 
 ### Convergence of a numerical model
 
@@ -639,16 +696,102 @@ print('years=',year)
 print('population =', pop)
 ```
 
-
 ```{code-cell} ipython3
 print('average population changes 1900-1950, 1950-2000, 2000-2020')
 print((pop[1:] - pop[0:-1])/(year[1:] - year[0:-1]))
+print()
+print('average growth rate of 1900 - 1950, 1950-2000, 2000-2020')
+print(((pop[1:] - pop[0:-1])/(year[1:] - year[0:-1]))/pop[1:])
+print()
 print('average growth of 1900 - 2020')
 print(np.mean((pop[1:] - pop[0:-1])/(year[1:] - year[0:-1])))
+print()
+```
+
+```{code-cell} ipython3
+#Part C
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+def p_analytical(year):
+    '''Analytical solution for the world population estimation given the year on or after 1900
+    
+        Arguments 
+    ---------
+    year: the given world year, the independent variable
+    kg: growth rate
+    p1900: The known initial value at year = 1900
+    Returns
+    -------
+    pt = The estimated world population at year'''
+    kg = 0.013
+    p1900 = 1578000000
+    pt = p1900*np.exp(kg*(tA-1900))
+    return pt
+
+tA = np.array([1900., 1950., 2000., 2020])
+plt.plot(tA,p_analytical(tA), '-', label= 'analytical')
+
+#Numerical
+kg = 0.013
+step = 20 #interval size
+tN = np.arange(1900, 2020+step, step) #np.arange(start, stop, step size)
+dt = tN[1] - tN[0]
+p = np.zeros(len(tN))
+p[0] = 1578000000
+for i in range(0, len(tN)-1):
+    p[i+1] = kg*p[i]*dt + p[i]
+
+print(tN)
+print() 
+plt.plot(tN,p, 'o-', label='numerical')
+plt.legend(loc='best');
+
+```
+
+```{code-cell} ipython3
+#Part C using np.linspace instead of np.arange because why not.
+def p_analytical(year):
+    '''Analytical solution for the world population estimation given the year on or after 1900
+    
+        Arguments 
+    ---------
+    year: the given world year, the independent variable
+    kg: growth rate
+    p1900: The known initial value at year = 1900
+    Returns
+    -------
+    pt = The estimated world population at year'''
+    kg = 0.013
+    p1900 = 1578000000
+    pt = p1900*np.exp(kg*(tA-1900))
+    return pt
+
+tA = np.array([1900., 1950., 2000., 2020])
+plt.plot(tA,p_analytical(tA), '-', label= 'analytical')
+
+
+#Numerical
+kg = 0.013
+tN = np.linspace(1900, 2020, 50) #np.linspace(start, stop, # of intervals) 2020-1900= 120/20years = 6
+dt = tN[1]-tN[0] #interval size
+p = np.zeros(len(tN))
+p[0] = 1578000000
+for i in range(0, len(tN)-1):
+    p[i+1] = kg*p[i]*dt + p[i]
+    
+print(tN)
+print() 
+plt.plot(tN,p, 'o-', label='numerical')
+plt.legend(loc='best');
+```
+
+```{code-cell} ipython3
+print('d.', 'd is already done below and I already proved that it converges as the step size decreases')
 ```
 
 __d.__ As the number of time steps increases, the Euler approximation approaches the analytical solution, not the measured data. The best-case scenario is that the Euler solution is the same as the analytical solution.
-
 
 +++
 
@@ -679,6 +822,57 @@ def exptaylor(x,n):
             ex+=x**(i+1)/factorial(i+1) # add the nth-order result for each step in loop
         return ex
         
+```
+
+```{code-cell} ipython3
+from math import factorial
+def exptaylor(x,n):
+    '''Taylor series expansion about x=0 for the function e^x
+    the full expansion follows the function
+    e^x = 1+ x + x**2/2! + x**3/3! + x**4/4! + x**5/5! +...'''
+    if n<1:
+        print('lowest order expansion is 0 where e^x = 1')
+        return 1
+    else:
+        ex = 1+x # define the first-order taylor series result
+        for i in range(1,n):
+            ex+=x**(i+1)/factorial(i+1) # add the nth-order result for each step in loop
+        return ex
+
+print(exptaylor(1,2))
+print(np.exp(1))
+print()
+print('a.', 'The relative error of exptaylor() to np.exp() is', abs((exptaylor(1,2)-np.exp(1)))/np.exp(1)*100, 'percent')
+```
+
+```{code-cell} ipython3
+%%time
+exptaylor(1,2)
+```
+
+```{code-cell} ipython3
+%%time
+exptaylor(1,10)
+```
+
+```{code-cell} ipython3
+%%time
+exptaylor(1,100000)
+```
+
+```{code-cell} ipython3
+print('I tried to run and it took at least over 30 minutes so I cancelled it. I thought it would take 400000 microseconds which is 0.4 seconds and it is clearly not the case')
+```
+
+```{code-cell} ipython3
+exact = np.exp(2)
+N = 30
+error = np.zeros(N)
+for i in range(N):
+    error[i] = np.abs((exptaylor(2, i) - exact))/exact
+plt.semilogy(np.arange(N), error)
+plt.xlabel('Taylor series expansion order')
+plt.ylabel('relative error')
 ```
 
 ```{code-cell} ipython3
